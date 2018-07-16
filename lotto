@@ -1,0 +1,60 @@
+import java.util.Random;
+
+public class main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		System.out.println("HEllo world");
+
+		
+		int[] lotto = new int[6];
+		
+		int num=0;
+		int j=0;
+		int random;
+		
+		
+		do {
+			
+			Random rand = new Random();
+			random = rand.nextInt(45)+1;
+			System.out.print(random + " ");
+			
+			for(j=0; j<=num;j++) {
+				
+				if(lotto[j] == random) {
+					//System.out.println("Equal num : " + random + " ");
+					break;
+				}
+				else {
+					
+				}
+	
+
+			}
+			if((num+1)==j) {
+				lotto[num] = random;
+				num++;
+			}
+			
+			
+		}while(num < 6);
+	
+
+		System.out.println();
+	
+
+		for(int i=0; i<6;i++)
+		{
+			System.out.print(lotto[i] + " ");
+		}	
+			
+		
+		
+
+		
+	}
+}
+
+
