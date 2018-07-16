@@ -1,0 +1,115 @@
+
+public class FourByteInterger {
+
+	byte[] numbers = new byte[4];
+
+	public FourByteInterger(byte[] init) {
+		this.numbers = init;
+	}
+
+	public void multiply(int x) {
+
+		//int a,b,c,d;
+		int sum0 = 0, sum1 = 0;
+		
+		int[] arr0 = new int[8];
+		//int[] arr1 = new int[8];
+
+		for(int i=0; i<8;i++) {
+			arr0[i] = (x >> i) % 2;
+			//arr1[i] = (x >> i) % 2;
+			
+		}
+		
+		//1010
+		//10
+		
+		
+		
+		
+		for(int i=0; i<8;i++) {
+			arr0[i] = arr0[i] * (numbers[0] << i); // 0 * 1010 , 1 * 0100
+			//arr1[i] = arr1[i] * (numbers[1] << i);
+		}
+		
+		for(int i=0; i<8; i++) {
+			sum0 += arr0[i];
+			//sum1 += arr1[i];
+		}
+		
+		System.out.println(sum0);
+		//System.out.println(sum1);
+	
+	}
+	
+	public void shift(int x) {
+		
+		//x가 8보다 작은 경우
+		//System.out.println(String.format("%x", (byte)(numbers[1] >>> 1)));
+		
+		//System.out.println((byte)(numbers[1] >>> 24) & 0xff); // 0111 1111이 내가 원한 것, 실제로 이루어진 작업 :  0111 1111 1111 1111 1111 1111 1111 1111
+		// &로 하는 것은 의미가 없다. -> shift할 때 이미 int가 되기 때문에 그만큼 shift를 더 해줘야함. byte로 바꾸는 것이 가장 이상적
+
+		
+		//System.out.println(String.format("%x", (byte)((byte)(numbers[1] >>> 24))& (byte) 0xff)) ; // 0111 1111이 내가 원한 것, 실제로 이루어진 작업 :  0111 1111 1111 1111 1111 1111 1111 1111
+		//System.out.println(String.format("%x", (byte)(numbers[1] >> 24) & (0xff)));
+		//System.out.println(numbers[1] >>> 2); // 0011 1111 실제로 이루어진 작업 : 0011 1111 1111 1111 1111 1111 1111 1111 1111 1111
+		// a >>> b : a의 비트를 b만큼 오른쪽으로 이동, 빈자리는 0으로 채우기
+		//byte라서 -1 값이 나왔는데 shift하니까 32bit가 되면서 값이 커짐. 뭔가 오류가 있다. 따라서 다음과 같이 바꾸면 값이 올바르게 나올 것
+		
+		//SHIFT한 그 순간 INT로 바뀌면서 SHIFT를 더 많이 하지 않는 이상 불가능.   	1000 1000
+		
+		
+		for(int i=0; i<x; i++) {
+			
+			byte a = numbers[0];
+			byte b = numbers[1];
+			byte c = numbers[2];
+			byte d = numbers[3];
+			
+			
+			
+			numbers[3] =(byte)((byte)(d<<1) | ((byte)((c>>7) & 0x01)));
+			numbers[2] =(byte)((byte)(c<<1) | ((byte)((b>>7) & 0x01)));
+			numbers[1] =(byte)((byte)(b<<1) | ((byte)((a>>7) & 0x01)));
+			numbers[0] =(byte)((byte)(a<<1));
+			
+			
+			//System.out.println(String.format("%x", numbers[3]));
+			//System.out.println(String.format("%x", numbers[2]));
+			//System.out.println(String.format("%x", numbers[1]));
+			//System.out.println(String.format("%x", numbers[0]));
+			
+		}
+		/*
+		numbers[0] = (byte) ((byte)(a << x));
+		numbers[1] = (byte) ((byte) (b << x) | (byte) (a >> (8-x)) | (byte) ); 
+		
+		numbers[0] = (byte) ((byte)(a << x) | (byte)(b >> (8-x)) | (byte)(c >> (x-8)) | (byte)(d >> (x-16)));
+		numbers[1] = (byte) ((byte)(b << x) | (byte)(c >> (8-x)) | (byte)(d >> (x-8)));
+		numbers[2] = (byte) ((byte)(c << x) | (byte)(d >> (8-x)));
+		numbers[3] = (byte) ((byte)(d << x));
+		*/
+	}
+
+	@Override
+	public String toString() {
+		String retval = "";
+		for(int i =0 ; i < numbers.length ; i ++) {
+			retval += String.format("0x%02x ", numbers[i]);
+		}
+		return retval;
+	}
+	
+	public static void main(String[] args) {
+		FourByteInterger f = new FourByteInterger(new byte[] {(byte) 0xe2, (byte) 0xf9, (byte)0xc2, 0x02 } );
+		//FourByteInterger f = new FourByteInterger(new byte[] {(byte) 0x22, (byte) 0x79, 0x00, 0x00 } );
+		System.out.println(f.toString());
+		
+		
+		f.shift(5);
+		System.out.println(f.toString());
+	}
+	 
+
+}
